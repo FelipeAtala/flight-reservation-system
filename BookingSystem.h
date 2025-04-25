@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -20,4 +19,9 @@ public:
     void make_reservation();
     void show_flightInfo();
     void show_reservation();
+    void cancel_reservation();
+    void save_data() const;
+    void save_reservations_only() const;
+    void save_passengers_only() const; // <--- NOWA FUNKCJA
+    void load_data();
 };
