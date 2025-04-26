@@ -1,9 +1,2 @@
-Jan Kowalski P001
-Anna Nowak P002
-Marek Zielinski P003
-Katarzyna Malinowska P004
-Piotr Wisniewski P005
-Ziomek Mordeczka P006
-Ziomek Ziomeczkuniek P7
-Eryk Lampart P8
-Jakub Homont P9
+Filip Konfi P1
+Filip Konfeder P2
