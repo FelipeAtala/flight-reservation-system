@@ -19,7 +19,7 @@ void BookingSystem::add_passenger() {
     string name, surname, passenger_id;
     cout << "Imię pasażera: "; cin >> name;
     cout << "Nazwisko pasażera: "; cin >> surname;
-    cout << "ID pasażera: "; cin >> passenger_id;
+    passenger_id = "P" + to_string(passenger_counter++);
     passengers.emplace_back(name, surname, passenger_id);
 
     save_passengers_only();
@@ -139,9 +139,9 @@ void BookingSystem::save_passengers_only() const {
 }
 
 void BookingSystem::load_data() {
-    ifstream fIn("flights.txt"), pIn("passengers.txt"), rIn("reservations.txt");
+    ifstream flightIn("flights.txt"), passengerIn("passengers.txt"), reservationIn("reservations.txt");
 
-    if (!fIn || !pIn || !rIn) {
+    if (!flightIn || !passengerIn || !reservationIn) {
         cout << "[BŁĄD] Nie można otworzyć plików danych!" << endl;
         return;
     }
@@ -149,21 +149,30 @@ void BookingSystem::load_data() {
     flights.clear();
     passengers.clear();
     reservations.clear();
+    passenger_counter = 1;
 
-    string f_numb, origin, destin, time, f_name, s_name, p_id, f_id;
-    int seats;
+    string flightNumber, origin, destination, departureTime;
+    string firstName, lastName, passengerID, loadedFlightID;
+    int totalSeats, seatNumber;
     double price;
 
-    while (fIn >> f_numb >> origin >> destin >> time >> seats >> price) {
-        flights.emplace_back(origin, destin, f_numb, time, price, seats);
+    while (flightIn >> flightNumber >> origin >> destination >> departureTime >> totalSeats >> price) {
+        flights.emplace_back(origin, destination, flightNumber, departureTime, price, totalSeats);
     }
 
-    while (pIn >> f_name >> s_name >> p_id) {
-        passengers.emplace_back(f_name, s_name, p_id);
+    while (passengerIn >> firstName >> lastName >> passengerID) {
+        passengers.emplace_back(firstName, lastName, passengerID);
+        if (passengerID[0] == 'P') {
+            int number = stoi(passengerID.substr(1));
+            if (number >= passenger_counter) {
+                passenger_counter = number + 1;
+            }
+        }
     }
 
-    int r_count = 1, seat;
-    while (rIn >> p_id >> f_id >> seat) {
-        reservations.emplace_back(f_id, "R" + to_string(r_count++), p_id, seat);
+    int reservationCount = 1;
+    while (reservationIn >> passengerID >> loadedFlightID >> seatNumber) {
+        reservations.emplace_back(loadedFlightID, "R" + to_string(reservationCount++), passengerID, seatNumber);
     }
 }
+

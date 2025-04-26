@@ -12,6 +12,7 @@ private:
     vector<Flight> flights;
     vector<Reservation> reservations;
     vector<Passenger> passengers;
+    int passenger_counter = 1;
 public:
     BookingSystem();
     void add_flight();
