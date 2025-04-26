@@ -6,49 +6,48 @@ void BookingSystem::add_flight() {
     string flight_number, from, to, departure_time;
     int seats_total;
     double price;
-    cout << "Flight number: "; cin >> flight_number; 
-    cout << "From: "; cin >> from;
-    cout << "To :"; cin >> to;
-    cout << "Departure time: "; cin >> departure_time;
-    cout << "Total seats: "; cin >> seats_total;
-    cout << "Price: "; cin >> price;
+    cout << "Numer lotu: "; cin >> flight_number; 
+    cout << "Miasto wylotu: "; cin >> from;
+    cout << "Miasto docelowe: "; cin >> to;
+    cout << "Godzina odlotu: "; cin >> departure_time;
+    cout << "Liczba miejsc: "; cin >> seats_total;
+    cout << "Cena biletu: "; cin >> price;
     flights.emplace_back(from, to, flight_number, departure_time, price, seats_total);
 }
 
 void BookingSystem::add_passenger() {
     string name, surname, passenger_id;
-    cout << "First name: "; cin >> name;
-    cout << "Second name: "; cin >> surname;
-    cout << "Passenger ID: "; cin >> passenger_id;
+    cout << "Imię pasażera: "; cin >> name;
+    cout << "Nazwisko pasażera: "; cin >> surname;
+    cout << "ID pasażera: "; cin >> passenger_id;
     passengers.emplace_back(name, surname, passenger_id);
 
-    save_passengers_only(); // <--- OD RAZU zapisujemy po dodaniu pasażera
+    save_passengers_only();
 }
 
 void BookingSystem::make_reservation() {
     string flight_number, passenger_id;
-    cout << "Passenger ID: "; cin >> passenger_id;
-    cout << "Flight number: "; cin >> flight_number;
+    cout << "ID pasażera: "; cin >> passenger_id;
+    cout << "Numer lotu: "; cin >> flight_number;
     for (auto& x : flights) {
         if (x.get_flightNumber() == flight_number) {
             x.show_seats();
             int seat;
-            cout << "Choose your seat: "; cin >> seat;
+            cout << "Wybierz miejsce: "; cin >> seat;
             if (x.reserveSeat(seat)) {
                 string resID = "R" + to_string(reservations.size() + 1);
                 reservations.emplace_back(flight_number, resID, passenger_id, seat);
-                cout << "Reservation ID: " << resID << ", seat: " << seat << endl;
+                cout << "Rezerwacja zakończona sukcesem! ID rezerwacji: " << resID << ", miejsce: " << seat << endl;
 
-                save_reservations_only(); // <--- OD RAZU zapisujemy po rezerwacji
-
+                save_reservations_only();
                 return;
             } else {
-                cout << "You can't reserve that seat." << endl;
+                cout << "Nie udało się zarezerwować miejsca." << endl;
                 return;
             }
         }
     }
-    cout << "No such flight." << endl;
+    cout << "Nie znaleziono lotu o podanym numerze." << endl;
 }
 
 void BookingSystem::show_flightInfo() {
@@ -59,28 +58,33 @@ void BookingSystem::show_flightInfo() {
 
 void BookingSystem::show_reservation() {
     string p_id;
-    cout << "Passenger ID: "; cin >> p_id;
+    cout << "Podaj ID pasażera: "; cin >> p_id;
+    bool found = false;
     for (auto& x : reservations) {
         if (x.getID() == p_id) {
             x.show();
+            found = true;
         }
+    }
+    if (!found) {
+        cout << "Brak rezerwacji dla podanego pasażera." << endl;
     }
 }
 
 void BookingSystem::cancel_reservation() {
     string p_id, f_numb;
-    cout << "Passenger ID: "; cin >> p_id;
-    cout << "Which flight do you want to cancel: "; cin >> f_numb;
+    cout << "Podaj ID pasażera: "; cin >> p_id;
+    cout << "Podaj numer lotu: "; cin >> f_numb;
 
     for (auto it = reservations.begin(); it != reservations.end(); ++it) {
         if (it->getID() == p_id && it->get_flightNumber() == f_numb) {
             reservations.erase(it);
-            cout << "[DEBUG] Rezerwacja usunięta z RAM." << endl;
-            save_reservations_only(); // <--- OD RAZU zapisujemy po anulowaniu
+            cout << "Rezerwacja została anulowana." << endl;
+            save_reservations_only();
             return;
         }
     }
-    cout << "No such reservation." << endl;
+    cout << "Nie znaleziono takiej rezerwacji." << endl;
 }
 
 void BookingSystem::save_data() const {
@@ -108,7 +112,7 @@ void BookingSystem::save_reservations_only() const {
     ofstream rOut("reservations.txt");
 
     if (!rOut) {
-        cout << "[ERROR] Nie można otworzyć reservations.txt do zapisu!" << endl;
+        cout << "[BŁĄD] Nie można otworzyć pliku reservations.txt do zapisu!" << endl;
         return;
     }
 
@@ -116,14 +120,14 @@ void BookingSystem::save_reservations_only() const {
         rOut << x.getID() << " " << x.get_flightNumber() << " " << x.get_seat() << "\n";
     }
 
-    cout << "[INFO] Reservations updated." << endl;
+    cout << "[INFO] Plik reservations.txt został zaktualizowany." << endl;
 }
 
 void BookingSystem::save_passengers_only() const {
     ofstream pOut("passengers.txt");
 
     if (!pOut) {
-        cout << "[ERROR] Nie można otworzyć passengers.txt do zapisu!" << endl;
+        cout << "[BŁĄD] Nie można otworzyć pliku passengers.txt do zapisu!" << endl;
         return;
     }
 
@@ -131,14 +135,14 @@ void BookingSystem::save_passengers_only() const {
         pOut << x.get_full_name() << " " << x.getID() << "\n";
     }
 
-    cout << "[INFO] Passengers updated." << endl;
+    cout << "[INFO] Plik passengers.txt został zaktualizowany." << endl;
 }
 
 void BookingSystem::load_data() {
     ifstream fIn("flights.txt"), pIn("passengers.txt"), rIn("reservations.txt");
 
     if (!fIn || !pIn || !rIn) {
-        cout << "[ERROR] Nie można otworzyć plików danych!" << endl;
+        cout << "[BŁĄD] Nie można otworzyć plików danych!" << endl;
         return;
     }
 

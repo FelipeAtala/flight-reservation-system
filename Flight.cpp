@@ -19,7 +19,7 @@ bool Flight::reserveSeat(int index) {
 }
 string Flight::get_flightNumber() const { return flight_number; }
 void Flight::show_seats() const {
-    cout << "Mapa miejsc: " << endl;
+    cout << "Seat map: " << endl;
     for(size_t i = 0; i < seat_map.size(); i++) {
         if(seat_map[i]) { cout << "[" << i << "]"; }
         else { cout << "[X]"; }
