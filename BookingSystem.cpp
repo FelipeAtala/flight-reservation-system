@@ -20,12 +20,8 @@ void BookingSystem::add_passenger() {
     cout << "Imię pasażera: "; cin >> firstName;
     cout << "Nazwisko pasażera: "; cin >> lastName;
     string passengerID = "P" + to_string(passenger_counter++);
-
     passengers.emplace_back(firstName, lastName, passengerID);
-
     cout << "Dodano pasażera z ID: " << passengerID << endl;
-
-    save_passengers_only();
 }
 
 
@@ -42,8 +38,6 @@ void BookingSystem::make_reservation() {
                 string resID = "R" + to_string(reservations.size() + 1);
                 reservations.emplace_back(flight_number, resID, passenger_id, seat);
                 cout << "Rezerwacja zakończona sukcesem! ID rezerwacji: " << resID << ", miejsce: " << seat << endl;
-
-                save_reservations_only();
                 return;
             } else {
                 cout << "Nie udało się zarezerwować miejsca." << endl;
@@ -84,7 +78,6 @@ void BookingSystem::cancel_reservation() {
         if (it->getID() == p_id && it->get_flightNumber() == f_numb) {
             reservations.erase(it);
             cout << "Rezerwacja została anulowana." << endl;
-            save_reservations_only();
             return;
         }
     }
@@ -112,60 +105,31 @@ void BookingSystem::save_data() const {
     }
 }
 
-void BookingSystem::save_reservations_only() const {
-    ofstream rOut("reservations.txt");
-
-    if (!rOut) {
-        cout << "[BŁĄD] Nie można otworzyć pliku reservations.txt do zapisu!" << endl;
-        return;
-    }
-
-    for (const auto& x : reservations) {
-        rOut << x.getID() << " " << x.get_flightNumber() << " " << x.get_seat() << "\n";
-    }
-
-    cout << "[INFO] Plik reservations.txt został zaktualizowany." << endl;
-}
-
-void BookingSystem::save_passengers_only() const {
-    ofstream pOut("passengers.txt");
-
-    if (!pOut) {
-        cout << "[BŁĄD] Nie można otworzyć pliku passengers.txt do zapisu!" << endl;
-        return;
-    }
-
-    for (const auto& x : passengers) {
-        pOut << x.get_full_name() << " " << x.getID() << "\n";
-    }
-
-    cout << "[INFO] Plik passengers.txt został zaktualizowany." << endl;
-}
-
 void BookingSystem::load_data() {
     ifstream fIn("flights.txt"), pIn("passengers.txt"), rIn("reservations.txt");
-
     if (!fIn || !pIn || !rIn) {
-        cout << "[BŁĄD] Nie można otworzyć plików danych!" << endl;
+        cout << "Nie można otworzyć plików danych!" << endl;
         return;
     }
-
     flights.clear();
     passengers.clear();
     reservations.clear();
-
+    passenger_counter = 1;
     string f_numb, origin, destin, time, f_name, s_name, p_id, f_id;
     int seats;
     double price;
-
     while (fIn >> f_numb >> origin >> destin >> time >> seats >> price) {
         flights.emplace_back(origin, destin, f_numb, time, price, seats);
     }
-
     while (pIn >> f_name >> s_name >> p_id) {
         passengers.emplace_back(f_name, s_name, p_id);
+        int num = 0;
+        for(size_t i = 1; i < p_id.size(); i++){
+            num = num * 10 + (p_id[i] - '0');
+        }
+        if (num >= passenger_counter)
+        passenger_counter = num + 1;
     }
-
     int r_count = 1, seat;
     while (rIn >> p_id >> f_id >> seat) {
         reservations.emplace_back(f_id, "R" + to_string(r_count++), p_id, seat);

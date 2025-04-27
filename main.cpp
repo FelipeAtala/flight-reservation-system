@@ -16,20 +16,16 @@ int main() {
         cout << "2. Dodaj pasażera\n";
         cout << "3. Zarezerwuj lot\n";
         cout << "4. Pokaż rezerwacje pasażera\n";
-        cout << "5. Oblicz statystyki cen (wątek)\n";
-        cout << "6. Anuluj rezerwację\n";
-        cout << "7. Wyjście\n";
+        cout << "5. Anuluj rezerwację\n";
+        cout << "6. Wyjście\n";
         cout << "Wybór: ";
         cin >> choice;
-
         if (choice == 1) system.show_flightInfo();
         else if (choice == 2) system.add_passenger();
         else if (choice == 3) system.make_reservation();
         else if (choice == 4) system.show_reservation();
-        else if (choice == 6) system.cancel_reservation();
-        // TODO: opcja 5
-    } while (choice != 7);
-
+        else if (choice == 5) system.cancel_reservation();
+    } while (choice != 6);
     system.save_data();
     return 0;
 }

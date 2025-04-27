@@ -22,7 +22,5 @@ public:
     void show_reservation();
     void cancel_reservation();
     void save_data() const;
-    void save_reservations_only() const;
-    void save_passengers_only() const;
     void load_data();
 };

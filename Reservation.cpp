@@ -2,8 +2,8 @@
 #include <iostream>
 using namespace std;
 
-Reservation::Reservation(string fn, string rid, string pid, int seat)
-    : flight_number(fn), reservation_id(rid), passenger_id(pid), seat_number(seat) {}
+Reservation::Reservation(string f_numb, string r_id, string p_id, int s)
+    : flight_number(f_numb), reservation_id(r_id), passenger_id(p_id), seat_number(s) {}
 
 void Reservation::show() const {
     cout << "ID rezerwacji: " << reservation_id
