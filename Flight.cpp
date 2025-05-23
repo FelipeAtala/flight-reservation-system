@@ -33,3 +33,6 @@ int Flight::get_total_seats() const { return seats_total; }
 string Flight::get_origin() const { return origin; }
 string Flight::get_destination() const { return destination; }
 string Flight::get_departure_time() const { return departure_time; }
+void Flight::set_price(double p) { price = p; }
+void Flight::set_departure_time(string t) { departure_time = t; }
+

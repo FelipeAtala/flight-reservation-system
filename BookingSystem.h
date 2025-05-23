@@ -5,6 +5,7 @@
 #include "Flight.h"
 #include "Reservation.h"
 #include "Passenger.h"
+#include <algorithm>
 using namespace std;
 
 class BookingSystem {
@@ -23,4 +24,12 @@ public:
     void cancel_reservation();
     void save_data() const;
     void load_data();
+    void modify_flight();
+    void remove_flight();
+    void show_passengers() const;
+    void modify_passenger();
+    void remove_passenger();
+    void modify_reservation();
+    void filter_by_destination() const;
+    void sort_flights_by_price();
 };

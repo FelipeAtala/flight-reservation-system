@@ -16,6 +16,10 @@ int Reservation::get_seat() const {
     return seat_number;
 }
 
+void Reservation::set_seat(int s) {
+    seat_number = s;
+}
+
 string Reservation::getID() const {
     return passenger_id;
 }

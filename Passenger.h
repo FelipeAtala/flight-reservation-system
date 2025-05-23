@@ -9,5 +9,6 @@ public:
     Passenger(string n, string sn, string i);
     string getID() const;
     string get_full_name() const;
-    
+    void set_name(string n);
+    void set_surname(string s);
 };

@@ -13,5 +13,5 @@ public:
     string getID() const;
     string get_flightNumber() const;
     int get_seat() const;
-
+    void set_seat(int s);
 };

@@ -23,4 +23,6 @@ public:
     string get_origin() const;
     string get_destination() const;
     string get_departure_time() const;
+    void set_price(double p);
+    void set_departure_time(string t);
 };
